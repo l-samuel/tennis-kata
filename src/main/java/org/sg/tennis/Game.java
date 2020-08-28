@@ -1,7 +1,6 @@
 package org.sg.tennis;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -112,5 +111,9 @@ final class Game {
     @Override
     public int hashCode() {
         return Objects.hash(player1, player2, inProgress, p1, p2, currentGame, score, currentSet);
+    }
+
+    public boolean isTieBreak() {
+        return currentSet.getScorePlayer1()== 6 && currentSet.getScorePlayer2()==6;
     }
 }

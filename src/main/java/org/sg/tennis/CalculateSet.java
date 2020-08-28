@@ -7,6 +7,7 @@ public class CalculateSet extends Calculate {
     @Override
     public void calculate(Game game) {
         Set currentSet = game.getCurrentSet();
+
         if(isPlayerWinSet(currentSet.getScorePlayer1(), currentSet.getScorePlayer2())){
             List<Set> score = game.getScore();
             score.add(currentSet);
@@ -22,7 +23,15 @@ public class CalculateSet extends Calculate {
         }
     }
 
-    private boolean isPlayerWinSet(int scorePlayer1, int scorePlayer2) {
+    private boolean isPlayerWinSet(final int scorePlayer1,final int scorePlayer2) {
+        return winSet(scorePlayer1, scorePlayer2) || winTieBreak(scorePlayer1, scorePlayer2);
+    }
+
+    private boolean winSet(final int scorePlayer1,final int scorePlayer2) {
         return scorePlayer1 > 5 && scorePlayer1 - scorePlayer2 > 1;
+    }
+
+    private boolean winTieBreak(final int scorePlayer1,final int scorePlayer2) {
+        return scorePlayer1==7 & scorePlayer2==6;
     }
 }

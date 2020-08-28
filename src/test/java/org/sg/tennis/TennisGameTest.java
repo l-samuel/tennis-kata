@@ -98,6 +98,64 @@ public class TennisGameTest {
     }
 
     @Test
+    void next_set_is_tie_break() {
+        Game game = new Game("name player 1", "name player 2", 3, 1, new ArrayList<>(), new Set(5, 6));
+
+        //when
+        tennisGame.addPointPlayersOne(game);
+        tennisGame.calculateScore(game);
+        //then
+        assertThat(game.getP1()).isEqualTo(0);
+        assertThat(game.getP2()).isEqualTo(0);
+        assertThat(game.getCurrentSet()).isEqualTo(new Set(6, 6));
+        assertThat(game.isTieBreak()).isTrue();
+    }
+
+    @Test
+    void player_1_win_a_point_in_tieBreak() {
+        //given
+        Game game = new Game("name player 1", "name player 2", 5, 4, new ArrayList<>(), new Set(6, 6));
+
+        //when
+        tennisGame.addPointPlayersOne(game);
+        tennisGame.calculateScore(game);
+        //then
+        assertThat(game.getP1()).isEqualTo(6);
+        assertThat(game.getP2()).isEqualTo(4);
+        assertThat(game.getCurrentSet()).isEqualTo(new Set(6, 6));
+    }
+
+    @Test
+    void player_1_win_the_set_by_tieBreak() {
+        //given
+        Game game = new Game("name player 1", "name player 2", 7, 5, new ArrayList<>(), new Set(6, 6));
+
+        //when
+        tennisGame.addPointPlayersOne(game);
+        tennisGame.calculateScore(game);
+        //then
+        assertThat(game.getP1()).isEqualTo(0);
+        assertThat(game.getP2()).isEqualTo(0);
+        assertThat(game.getCurrentSet()).isEqualTo(new Set(0, 0));
+        assertThat(game.getScore()).containsExactly(new Set(7, 6));
+    }
+
+    @Test
+    void player_2_win_the_set_by_tieBreak() {
+        //given
+        Game game = new Game("name player 1", "name player 2", 10, 11, new ArrayList<>(), new Set(6, 6));
+
+        //when
+        tennisGame.addPointPlayersTwo(game);
+        tennisGame.calculateScore(game);
+        //then
+        assertThat(game.getP1()).isEqualTo(0);
+        assertThat(game.getP2()).isEqualTo(0);
+        assertThat(game.getCurrentSet()).isEqualTo(new Set(0, 0));
+        assertThat(game.getScore()).containsExactly(new Set(6, 7));
+    }
+
+    @Test
     void player_2_win_the_set() {
         //given
         Game game = new Game("name player 1", "name player 2", 1, 3, new ArrayList<>(), new Set(0, 5));
