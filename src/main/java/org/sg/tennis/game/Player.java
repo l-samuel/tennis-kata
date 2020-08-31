@@ -2,7 +2,7 @@ package org.sg.tennis.game;
 
 import java.util.Objects;
 
-public class Player {
+public final class Player {
     private String name;
 
     public Player(final String name) {
@@ -12,7 +12,6 @@ public class Player {
     public String getName() {
         return name;
     }
-
 
     @Override
     public boolean equals(Object o) {

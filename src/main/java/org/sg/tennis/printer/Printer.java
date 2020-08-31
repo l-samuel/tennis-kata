@@ -1,12 +1,15 @@
 package org.sg.tennis.printer;
 
+import org.sg.tennis.Writer;
 import org.sg.tennis.game.Game;
+import org.sg.tennis.game.Match;
+import org.sg.tennis.game.Player;
 import org.sg.tennis.game.Set;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Printer {
+public class Printer implements Writer {
 
     private static final String SEPARATOR_SCORE = "-";
     public static final String LINE_BREAK = "\n";
@@ -25,33 +28,37 @@ public class Printer {
         return dictionary;
     }
 
-    public String print(final Game game) {
+    @Override
+    public String print(final Match match) {
         String result;
-        result = printPlayers(game.getPlayer1().getName(), game.getPlayer2().getName());
-        result += printScore(game.getScore());
-        if (game.isInProgress()) {
-            result += printCurrentGame(game.getPointsP1(), game.getPointsP2());
+        result = printPlayers(match.getPlayer1(), match.getPlayer2());
+        if (match.isInProgress()) {
+            List<Set> score = match.getScore();
+            score.add(match.getCurrentSet());
+            result += printScore(score);
+            result += printCurrentGame(match.getCurrentGame());
+        } else {
+            result += printScore(match.getScore());
         }
-        result += printMatchStatus(game);
+        result += printMatchStatus(match);
+
         return result;
     }
 
-
-    private String printPlayers(final String player1, final String player2) {
+    private String printPlayers(final Player player1, final Player player2) {
         String players = "";
         players += "Player  1 : ";
-        players += player1 + LINE_BREAK;
+        players += player1.getName() + LINE_BREAK;
         players += "Player  2 : ";
-        players += player2 + LINE_BREAK;
+        players += player2.getName() + LINE_BREAK;
         return players;
     }
 
     private String printScore(final List<Set> score) {
-        String result = "";
-        result += "Score : ";
+        String result = "Score : ";
         String collect = score
                 .stream()
-                .map(set -> format(set))
+                .map(this::format)
                 .collect(Collectors.joining(" ", "", "\n"));
         result += collect;
         return result;
@@ -62,32 +69,34 @@ public class Printer {
     }
 
 
-    private String printCurrentGame(final int pointsP1, final int pointsP2) {
+    private String printCurrentGame(final Game currentGame) {
         String result = "Current game status : ";
         Optional<String> specificRule = Arrays.stream(Rules.values())
-                .filter((rule) -> rule.valid(pointsP1, pointsP2))
+                .filter((rule) -> rule.valid(currentGame.getPointsP1(), currentGame.getPointsP2()))
                 .map(Rules::getResult)
                 .findFirst();
-        return result + specificRule.orElseGet(() -> printClassicGame(pointsP1, pointsP2))+LINE_BREAK;
+        return result + specificRule.orElseGet(() -> printClassicGame(currentGame.getPointsP1(), currentGame.getPointsP2())) + LINE_BREAK;
     }
 
-    private String printClassicGame(int pointsP1, int pointsP2) {
-        String result= "";
+    private String printClassicGame(final int pointsP1, final int pointsP2) {
+        String result = "";
         result += scoreDictionary.get(pointsP1);
         result += SEPARATOR_SCORE;
         result += scoreDictionary.get(pointsP2);
         return result;
     }
 
-    private String printMatchStatus(final Game game) {
+    private String printMatchStatus(final Match match) {
         String result = "Match Status : ";
-        if (game.isPlayerWin(game.getPlayer1())) {
+        if (match.isPlayerWin(match.getPlayer1())) {
             result += "Player1 wins";
-        } else if (game.isPlayerWin(game.getPlayer2())) {
+        } else if (match.isPlayerWin(match.getPlayer2())) {
             result += "Player2 wins";
         } else {
             result += "in progress";
         }
         return result;
     }
+
+
 }

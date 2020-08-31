@@ -1,6 +1,6 @@
 package org.sg.tennis.calculator;
 
-import org.sg.tennis.game.Game;
+import org.sg.tennis.game.Match;
 
 public abstract class Calculate {
 
@@ -10,5 +10,5 @@ public abstract class Calculate {
         this.nextCalculation = nextCalculation;
     }
 
-    public abstract void calculate(Game game);
+    public abstract void calculate(Match match);
 }

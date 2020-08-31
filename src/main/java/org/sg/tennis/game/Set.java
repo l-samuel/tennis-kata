@@ -2,7 +2,7 @@ package org.sg.tennis.game;
 
 import java.util.Objects;
 
-public class Set {
+public final class Set {
     private int scorePlayer1;
     private int scorePlayer2;
 
@@ -19,6 +19,14 @@ public class Set {
         return scorePlayer2;
     }
 
+    public void addSetPlayer1(){
+        scorePlayer1++;
+    }
+
+    public void addSetPlayer2() {
+        scorePlayer2++;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -26,14 +34,6 @@ public class Set {
         Set set = (Set) o;
         return scorePlayer1 == set.scorePlayer1 &&
                 scorePlayer2 == set.scorePlayer2;
-    }
-
-    public void addSetPlayer1(){
-        scorePlayer1++;
-    }
-
-    public void addSetPlayer2() {
-        scorePlayer2++;
     }
 
     @Override

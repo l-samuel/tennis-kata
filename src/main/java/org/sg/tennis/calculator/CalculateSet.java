@@ -1,6 +1,6 @@
 package org.sg.tennis.calculator;
 
-import org.sg.tennis.game.Game;
+import org.sg.tennis.game.Match;
 import org.sg.tennis.game.Set;
 
 import java.util.List;
@@ -8,15 +8,14 @@ import java.util.List;
 public class CalculateSet extends Calculate {
 
     @Override
-    public void calculate(final Game game) {
-        Set currentSet = game.getCurrentSet();
+    public void calculate(final Match match) {
+        Set currentSet = match.getCurrentSet();
 
         if(isPlayerWinSet(currentSet.getScorePlayer1(), currentSet.getScorePlayer2())
         || isPlayerWinSet(currentSet.getScorePlayer2(), currentSet.getScorePlayer1()) ){
-            List<Set> score = game.getScore();
+            List<Set> score = match.getScore();
             score.add(currentSet);
-            game.resetCurrentSet();
-            nextCalculation.calculate(game);
+            match.resetCurrentSet();
         }
     }
 
