@@ -6,49 +6,59 @@ import java.util.Objects;
 
 final class Game {
 
-    private String player1;
-    private String player2;
-    private boolean inProgress = true;
-    private int p1=0;
-    private int p2=0;
-    private CurrentGame currentGame;
+    private final Player player ;
+    private final Player player2;
+    private int pointsP1 =0;
+    private int pointsP2 =0;
+//    private CurrentGame currentGame;
     private List<Set> score;
     private Set currentSet = new Set(0, 0);
 
     public Game(String player1, String player2) {
-        this.player1 = player1;
-        this.player2 = player2;
+        this.player = new Player(player1);
+        this.player2 = new Player(player2);
         this.score = new ArrayList<>();
         this.score.add(new Set(0, 0));
-        this.currentGame = new CurrentGame(0,0);
+//        this.currentGame = new CurrentGame(0,0);
     }
 
-    public Game(String player1, String player2, int p1, int p2, List<Set> score, Set currentSet) {
-        this.player1 = player1;
-        this.player2 = player2;
-        this.p1 = p1;
-        this.p2 = p2;
+    public Game(String namePlayer1, String namePlayer2, int pointsP1, int pointsP2, List<Set> score, Set currentSet) {
+        this.player = new Player(namePlayer1);
+        this.player2 = new Player(namePlayer2);
+        this.pointsP1 = pointsP1;
+        this.pointsP2 = pointsP2;
         this.score = score;
         this.currentSet = currentSet;
-        this.currentGame = new CurrentGame(p1,p2);
+//        this.currentGame = new CurrentGame(pointsP1, pointsP2);
     }
 
     public String getPlayer1() {
-        return player1;
+        return player.getName();
     }
 
     public String getPlayer2() {
-        return player2;
+        return player2.getName();
     }
 
     public boolean isInProgress() {
-        return inProgress;
+
+        long winningSet = score.stream()
+                .filter(s -> isPlayerWinSet(s.getScorePlayer1(), s.getScorePlayer2()) || isPlayerWinSet(s.getScorePlayer2(), s.getScorePlayer1()))
+                .count();
+
+        return !isGameFinished(winningSet);
     }
 
-
-    public CurrentGame getCurrentGame() {
-        return currentGame;
+    private boolean isPlayerWinSet(final int scorePlayer1, final int scorePlayer2) {
+        return scorePlayer1 > 5 && scorePlayer1 - scorePlayer2 > 1;
     }
+
+    private boolean isGameFinished(final long winningSet) {
+        return winningSet > 2;
+    }
+//    public CurrentGame getCurrentGame() {
+//        return currentGame;
+//    }
 
     public List<Set> getScore() {
         return score;
@@ -63,34 +73,30 @@ final class Game {
     }
 
     public void addPointPlayer1() {
-        currentGame.addPointPlayer1();
-        p1++;
+//        currentGame.addPointPlayer1();
+        pointsP1++;
     }
 
     public void addPointPlayer2() {
-        currentGame.addPointPlayer2();
-        p2++;
+//        currentGame.addPointPlayer2();
+        pointsP2++;
     }
 
-    public int getP1() {
-        return p1;
+    public int getPointsP1() {
+        return pointsP1;
     }
 
-    public int getP2() {
-        return p2;
+    public int getPointsP2() {
+        return pointsP2;
     }
 
     public void resetCurrentGame() {
-        p1 = 0;
-        p2 = 0;
+        pointsP1 = 0;
+        pointsP2 = 0;
     }
 
     public void resetCurrentSet(){
         currentSet = new Set(0, 0);
-    }
-
-    public void setInProgress(boolean inProgress) {
-        this.inProgress = inProgress;
     }
 
     @Override
@@ -98,19 +104,29 @@ final class Game {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
-        return inProgress == game.inProgress &&
-                p1 == game.p1 &&
-                p2 == game.p2 &&
-                Objects.equals(player1, game.player1) &&
+        return pointsP1 == game.pointsP1 &&
+                pointsP2 == game.pointsP2 &&
+                Objects.equals(player, game.player) &&
                 Objects.equals(player2, game.player2) &&
-                Objects.equals(currentGame, game.currentGame) &&
                 Objects.equals(score, game.score) &&
                 Objects.equals(currentSet, game.currentSet);
     }
 
     @Override
+    public String toString() {
+        return "Game{" +
+                "player=" + player +
+                ", player2=" + player2 +
+                ", pointsP1=" + pointsP1 +
+                ", pointsP2=" + pointsP2 +
+                ", score=" + score +
+                ", currentSet=" + currentSet +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
-        return Objects.hash(player1, player2, inProgress, p1, p2, currentGame, score, currentSet);
+        return Objects.hash(player, player2, pointsP1, pointsP2, score, currentSet);
     }
 
     public boolean isTieBreak() {

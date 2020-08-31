@@ -2,7 +2,7 @@ package org.sg.tennis;
 
 public class TennisGame {
 
-    public Game init(String player1, String player2) {
+    public Game init(final String player1, final String player2) {
         return new Game(player1, player2);
     }
 
@@ -19,12 +19,12 @@ public class TennisGame {
     }
 
     public Game calculateScore(final Game game) {
-        Calculate calCurrentGame = new CalculateCurrentGame();
-        Calculate calSet = new CalculateSet();
+        Calculate calculateCurrentGame = new CalculateCurrentGame();
+        Calculate calculateSet = new CalculateSet();
         Calculate calculateMatch = new CalculateMatch();
-        calCurrentGame.setNextCalculation(calSet);
-        calSet.setNextCalculation(calculateMatch);
-        calCurrentGame.calculate(game);
+        calculateCurrentGame.setNextCalculation(calculateSet);
+        calculateSet.setNextCalculation(calculateMatch);
+        calculateCurrentGame.calculate(game);
         return game;
     }
 }
