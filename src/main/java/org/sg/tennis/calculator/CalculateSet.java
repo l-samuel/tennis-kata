@@ -1,4 +1,7 @@
-package org.sg.tennis;
+package org.sg.tennis.calculator;
+
+import org.sg.tennis.game.Game;
+import org.sg.tennis.game.Set;
 
 import java.util.List;
 

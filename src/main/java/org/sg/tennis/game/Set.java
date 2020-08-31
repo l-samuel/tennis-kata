@@ -1,4 +1,4 @@
-package org.sg.tennis;
+package org.sg.tennis.game;
 
 import java.util.Objects;
 

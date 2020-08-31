@@ -1,11 +1,11 @@
-package org.sg.tennis;
+package org.sg.tennis.game;
 
 import java.util.Objects;
 
 public class CurrentGame {
 
-    private int p1=0;
-    private int p2=0;
+    private int p1;
+    private int p2;
 
     public CurrentGame(int p1, int p2) {
         this.p1 = p1;

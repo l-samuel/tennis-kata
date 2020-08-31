@@ -1,12 +1,12 @@
-package org.sg.tennis;
+package org.sg.tennis.game;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-final class Game {
+public final class Game {
 
-    private final Player player ;
+    private final Player player1;
     private final Player player2;
     private int pointsP1 =0;
     private int pointsP2 =0;
@@ -15,7 +15,7 @@ final class Game {
     private Set currentSet = new Set(0, 0);
 
     public Game(String player1, String player2) {
-        this.player = new Player(player1);
+        this.player1 = new Player(player1);
         this.player2 = new Player(player2);
         this.score = new ArrayList<>();
         this.score.add(new Set(0, 0));
@@ -23,7 +23,7 @@ final class Game {
     }
 
     public Game(String namePlayer1, String namePlayer2, int pointsP1, int pointsP2, List<Set> score, Set currentSet) {
-        this.player = new Player(namePlayer1);
+        this.player1 = new Player(namePlayer1);
         this.player2 = new Player(namePlayer2);
         this.pointsP1 = pointsP1;
         this.pointsP2 = pointsP2;
@@ -32,33 +32,32 @@ final class Game {
 //        this.currentGame = new CurrentGame(pointsP1, pointsP2);
     }
 
-    public String getPlayer1() {
-        return player.getName();
+    public Player getPlayer1() {
+        return player1;
     }
 
-    public String getPlayer2() {
-        return player2.getName();
+    public Player getPlayer2() {
+        return player2;
     }
 
     public boolean isInProgress() {
+        return !isPlayerWin(player1) && !isPlayerWin(player2);
+    }
 
+    public boolean isPlayerWin(Player player){
         long winningSet = score.stream()
-                .filter(s -> isPlayerWinSet(s.getScorePlayer1(), s.getScorePlayer2()) || isPlayerWinSet(s.getScorePlayer2(), s.getScorePlayer1()))
+                .filter(s -> player.equals(player1) ? isPlayerWinSet(s.getScorePlayer1(), s.getScorePlayer2()) : isPlayerWinSet(s.getScorePlayer2(), s.getScorePlayer1()))
                 .count();
-
-        return !isGameFinished(winningSet);
+        return isGameFinished(winningSet);
     }
 
     private boolean isPlayerWinSet(final int scorePlayer1, final int scorePlayer2) {
-        return scorePlayer1 > 5 && scorePlayer1 - scorePlayer2 > 1;
+        return scorePlayer1 > 5 && scorePlayer1 - scorePlayer2 > 1 || scorePlayer1==7 & scorePlayer2==6 ;
     }
 
     private boolean isGameFinished(final long winningSet) {
         return winningSet > 2;
     }
-//    public CurrentGame getCurrentGame() {
-//        return currentGame;
-//    }
 
     public List<Set> getScore() {
         return score;
@@ -106,7 +105,7 @@ final class Game {
         Game game = (Game) o;
         return pointsP1 == game.pointsP1 &&
                 pointsP2 == game.pointsP2 &&
-                Objects.equals(player, game.player) &&
+                Objects.equals(player1, game.player1) &&
                 Objects.equals(player2, game.player2) &&
                 Objects.equals(score, game.score) &&
                 Objects.equals(currentSet, game.currentSet);
@@ -115,7 +114,7 @@ final class Game {
     @Override
     public String toString() {
         return "Game{" +
-                "player=" + player +
+                "player=" + player1 +
                 ", player2=" + player2 +
                 ", pointsP1=" + pointsP1 +
                 ", pointsP2=" + pointsP2 +
@@ -126,7 +125,7 @@ final class Game {
 
     @Override
     public int hashCode() {
-        return Objects.hash(player, player2, pointsP1, pointsP2, score, currentSet);
+        return Objects.hash(player1, player2, pointsP1, pointsP2, score, currentSet);
     }
 
     public boolean isTieBreak() {
